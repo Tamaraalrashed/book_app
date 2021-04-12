@@ -72,9 +72,9 @@ server.post('/search',(req,res)=>{
 
 
 function Books(book){
-this.image=book.volumeInfo.imageLinks.thumbnail;
+ this.image=book.volumeInfo.imageLinks.thumbnail;
 this.title=book.volumeInfo.title;
-this.author=book.volumeInfo.authors[0];
+this.author=book.volumeInfo.authors;
 this.description=book.volumeInfo.description;
 }
 
