@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Search Results</h2>
+
+    <div>
+        <% books.forEach(book=>{ %>
+          <img src="<%= book.image%>" alt="https://i.imgur.com/J5LVHEL.jpg">  
+            <h4><%= book.title%></h4>
+            <h4><%= book.author%></h4>
+            <p><%= book.description%></p>
+        <% }) %>
+    </div>
+</body>
+</html>
