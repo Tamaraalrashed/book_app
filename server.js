@@ -7,7 +7,7 @@ const { query } = require('express');
 const express=require('express');
 const superagent = require('superagent');
 const pg=require('pg');
-
+const methodOverride = require('method-override');
 const PORT = process.env.PORT || 3030;
 
 const server=express();
@@ -17,7 +17,7 @@ server.use(express.static('./public'))
 // const path = require( 'path' );
 // server.set( 'views', path.join( __dirname, '/views/pages' ) );
 // server.set( 'view engine','ejs' );
-
+server.use(methodOverride('_method'));
 
 const client = new pg.Client({
      connectionString: process.env.DATABASE_URL,
@@ -98,9 +98,9 @@ server.post('/searches',(req,res)=>{
 //   res.send(bookDataArr)
              res.render('pages/searches/shows',{booksResults:bookDataArr} );
          })
-// .catch(error=>{
-//      res.render('error',{error:err})
-// })
+.catch(error=>{
+     res.render('pages/error',{error:err})
+})
        
     })
 
