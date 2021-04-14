@@ -1,23 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/styles/reset.css"> 
+    <link rel="stylesheet" href="/styles/reset.css">
     <link rel="stylesheet" href="/styles/style.css">
 </head>
+
 <body>
     <header>
         <h1>Best Books!</h1>
+        <nav>
+            <ul>
+                <li> <a href="/">Home</a> </li>
+                <li> <a href="/searches/new">Search the Google Books API</a> </li>
+            </ul>
+        </nav>
     </header>
     <main>
-         <a href="/search/new">Search for Books</a> 
-        <h2>Hello World</h2>  
+        
+            <a href="/searches/new">Search the Google Books API</a>
+       
+        <section>
+            <h3> <%= booksResults.length%> Saved Books</h3>
+            <% booksResults.forEach((book)=>{%>
+        
+                 <img src="<%= book.image_url%>">
+                  <h3>
+                      <%= book.title%>
+                  </h3>
+                  <h3>
+                      <%= book.author%>
+                  </h3>
+            
+                  <button>
+                    <a href="/books/<%=book.id %>">View Details</a> 
+                  </button> 
+                
+                  <% }) %>
+           
+        </section>
+       
+
+
     </main>
     <footer>
 
     </footer>
 </body>
+
 </html>
