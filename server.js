@@ -41,11 +41,10 @@ server.get('/',(req,res)=>{
 let SQL=`SELECT * FROM books;`;
 client.query(SQL)
 .then((results=>{
-     console.log(results.rows);
+     // console.log(results.rows);
       res.render('pages/index',{booksResults:results.rows})
      
 }))
-// res.send('all is good')
     
 })
 
@@ -53,7 +52,33 @@ client.query(SQL)
 server.get('/searches/new',(req,res)=>{
   
          res.render('pages/searches/new');
-    })
+    });
+
+    server.get('/books/:bookID',(req,res)=>{
+     console.log(req.params);
+     let SQL = `SELECT * FROM books WHERE id=$1;`;
+      let safeValue = [req.params.bookID]
+     client.query(SQL,safeValue)
+     .then(results=>{
+      res.render('pages/books/show',{booksResults:results.rows})
+  
+});
+    });
+
+server.post('/books',(req,res)=>{
+
+console.log('form', req.body); 
+let { author, title, isbn, image_url, description}=req.body;
+
+let SQL=`INSERT INTO books (author, title, isbn, image_url, description) VALUES ($1,$2,$3,$4,$5) RETURNING *;`;
+let safeValues=[ author, title, isbn, image_url, description];
+client.query(SQL, safeValues)
+.then(results=>{
+     console.log(results.rows)
+     res.redirect(`/books/${results.rows[0].id}`)
+})
+// res.send('dddddd')
+    });
 
 //localhost:3000/searches
 server.post('/searches',(req,res)=>{
@@ -64,14 +89,14 @@ server.post('/searches',(req,res)=>{
          superagent.get(URL)
          .then(booksData=>{
           //     console.log('by title', booksData.body.items);
-          //    let bookDataArr= booksData.body.items.map((item)=>{
-          //       let newBook= new Books (item);
-          //       return newBook;
-          //         });
-          let x=booksData.body.items;
+             let bookDataArr= booksData.body.items.map((item)=>{
+                let newBook= new Books (item);
+                return newBook;
+                  });
+          // let x=booksData.body.items;
           console.log('by title', booksData.body.items);
- res.send(x)
-          //   res.render('pages/searches/shows',{books:bookDataArr} );
+//   res.send(bookDataArr)
+             res.render('pages/searches/shows',{booksResults:bookDataArr} );
          })
 // .catch(error=>{
 //      res.render('error',{error:err})
@@ -79,21 +104,14 @@ server.post('/searches',(req,res)=>{
        
     })
 
-//     server.get('/books/:id',(req,res)=>{
-//      let SQL=`SELECT * FROM books;`;
-//      client.query(SQL)
-//      .then((results=>{
-//           console.log(results.rows);
-//            res.render('pages/index',{booksResults:results.rows})
-          
-//      }))
 
 function Books(book){
- this.image=(book.volumeInfo.imageLinks)?book.volumeInfo.imageLinks.thumbnail:"https://i.imgur.com/J5LVHEL.jpg";
+ this.image_url=(book.volumeInfo.imageLinks)?book.volumeInfo.imageLinks.thumbnail:"https://i.imgur.com/J5LVHEL.jpg";
 this.title=book.volumeInfo.title;
-this.author=(book.volumeInfo.authors)? book.volumeInfo.authors: 'No author data for this book';
+this.author=(book.volumeInfo.authors)? book.volumeInfo.authors.join(', '): 'No author data for this book';
 this.description=(book.volumeInfo.description)?book.volumeInfo.description:'No description data for this book';
-this.industryIdentifiers=(book.volumeInfo.industryIdentifiers)?book.volumeInfo.industryIdentifiers.toString().join(','):'No ISBN data for this book';
+this.isbn=(book.volumeInfo.industryIdentifiers)?book.volumeInfo.industryIdentifiers[0].identifier:'No ISBN data for this book';
+// this.bookshelf= (book.volumeInfo.industryIdentifiers)?book.volumeInfo.industryIdentifiers.toString().join(','):'No ISBN data for this book';
 }
 
 //localhost:3000/*

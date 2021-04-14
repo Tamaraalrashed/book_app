@@ -11,17 +11,17 @@ body{
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-style: italic;
 }
-header{
+/* header{
     width: 100%;
-    /* background-color: black;  */
+    background-color: black; 
     margin: 20px;
-}
-header h1{
+} */
+/* header h1{
     background-color: black; 
     color: white;
     text-align: left;
-}
-h2{
+} */
+/* h2{
     color: white;
     background-color:grey;
     padding: 10px;
@@ -53,4 +53,4 @@ button{
     padding: 10px;
     background-color: black;
     color: white;
-}
+} */
