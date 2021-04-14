@@ -29,7 +29,7 @@ server.get('/',(req,res)=>{
 //localhost:3000/searches/new
 server.get('/searches/new',(req,res)=>{
   
-         res.render('pages/searches/new');
+ res.render('pages/searches/new');
     })
 
 //localhost:3000/search
