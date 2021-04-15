@@ -11,11 +11,54 @@
         <a href=""></a>
     </header>
     <main>
-        <%- include('./detail')  %>   
+     <!-- <%- include('./detail') %> -->
+     
+          
+     <section>
+        <% booksResults.forEach((book)=>{%>
+              
+            <img src="<%= book.image_url%>">
+            <h3>
+                <%= book.title%>
+            </h3>
+            <h3>
+                <%= book.author%>
+            </h3>
+            <p>
+              <%= book.description%>
+            </p>
+            <p>
+              ISBN: <%= book.isbn%>
+            </p>
+           
+            <button id='updateBtn'>Update</button>
+            <form action="/deleteBook/<%=book.id%>?_method=delete" method="post">
+                <button>Delete Book</button>
+             </form>
+            <section >
+              
+              <form id='updateForm' action="/updateBook/<%=book.id%>?_method=put" method="post">
+               <input type="text" name="title" value=' <%= book.title  %> '>
+               <input type="text" name="author" value="<%= book.author  %>">
+               <input type="text" name="isbn" value="<%= book.isbn  %>">
+               <input type="text" name="image_url" value="<%= book.image_url  %>">
+               <textarea name="description" cols="30" rows="10"><%= book.description  %></textarea>
+               <button type="submit">Update Book</button>
+            </form>
+    
+            
+    
+            <% }) %>
+         
+      
+      </section>
+    
 
          <a href="/">back to main page</a> 
+
     </main>
-    
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="../app.js"></script>
 </body>
 </html>
 

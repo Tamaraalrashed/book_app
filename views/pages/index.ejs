@@ -22,8 +22,7 @@
     </header>
     <main>
         
-            <a href="/searches/new">Search the Google Books API</a>
-       
+           
         <section>
             <h3> <%= booksResults.length%> Saved Books</h3>
             <% booksResults.forEach((book)=>{%>
@@ -35,7 +34,6 @@
                   <h3>
                       <%= book.author%>
                   </h3>
-            
                   <button>
                     <a href="/books/<%=book.id %>">View Details</a> 
                   </button> 
@@ -50,6 +48,9 @@
     <footer>
 
     </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="app.js"></script>
+    
 </body>
 
 </html>

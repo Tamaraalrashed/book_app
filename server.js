@@ -7,7 +7,7 @@ const { query } = require('express');
 const express=require('express');
 const superagent = require('superagent');
 const pg=require('pg');
-
+const methodOverride = require('method-override');
 const PORT = process.env.PORT || 3030;
 
 const server=express();
@@ -17,7 +17,7 @@ server.use(express.static('./public'))
 // const path = require( 'path' );
 // server.set( 'views', path.join( __dirname, '/views/pages' ) );
 // server.set( 'view engine','ejs' );
-
+server.use(methodOverride('_method'));
 
 const client = new pg.Client({
      connectionString: process.env.DATABASE_URL,
@@ -42,16 +42,36 @@ let SQL=`SELECT * FROM books;`;
 client.query(SQL)
 .then((results=>{
      // console.log(results.rows);
-      res.render('pages/index',{booksResults:results.rows})
-     
+      res.render('pages/index',{booksResults:results.rows}) 
 }))
-    
 })
+
+server.put('/updateBook/:bookID',(req,res)=>{
+let { author, title, isbn, image_url, description}= req.body;
+  let SQL = `UPDATE books SET author=$1, title=$2,isbn=$3,image_url=$4,description=$5 WHERE id=$6;`;
+  let safeValues = [author,title,isbn,image_url,description,req.params.bookID];
+  client.query(SQL,safeValues)
+  .then(()=>{
+    res.redirect(`/books/${req.params.bookID}`);
+  })
+})
+
+server.delete('/deleteBook/:bookID',(req,res)=>{
+       let SQL = `DELETE  FROM books WHERE id=$1;`;
+       let safeValue = [req.params.bookID];
+       client.query(SQL,safeValue)
+       .then(()=>{
+         res.redirect('/');
+       })
+     })
+
+
+
+
 
 //localhost:3000/searches/new
 server.get('/searches/new',(req,res)=>{
-  
-         res.render('pages/searches/new');
+    res.render('pages/searches/new');
     });
 
     server.get('/books/:bookID',(req,res)=>{
@@ -98,9 +118,9 @@ server.post('/searches',(req,res)=>{
 //   res.send(bookDataArr)
              res.render('pages/searches/shows',{booksResults:bookDataArr} );
          })
-// .catch(error=>{
-//      res.render('error',{error:err})
-// })
+.catch(error=>{
+     res.render('pages/error',{error:err})
+})
        
     })
 
