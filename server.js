@@ -42,16 +42,36 @@ let SQL=`SELECT * FROM books;`;
 client.query(SQL)
 .then((results=>{
      // console.log(results.rows);
-      res.render('pages/index',{booksResults:results.rows})
-     
+      res.render('pages/index',{booksResults:results.rows}) 
 }))
-    
 })
+
+server.put('/updateBook/:bookID',(req,res)=>{
+let { author, title, isbn, image_url, description}= req.body;
+  let SQL = `UPDATE books SET author=$1, title=$2,isbn=$3,image_url=$4,description=$5 WHERE id=$6;`;
+  let safeValues = [author,title,isbn,image_url,description,req.params.bookID];
+  client.query(SQL,safeValues)
+  .then(()=>{
+    res.redirect(`/books/${req.params.bookID}`);
+  })
+})
+
+server.delete('/deleteBook/:bookID',(req,res)=>{
+       let SQL = `DELETE  FROM books WHERE id=$1;`;
+       let safeValue = [req.params.bookID];
+       client.query(SQL,safeValue)
+       .then(()=>{
+         res.redirect('/');
+       })
+     })
+
+
+
+
 
 //localhost:3000/searches/new
 server.get('/searches/new',(req,res)=>{
-  
-         res.render('pages/searches/new');
+    res.render('pages/searches/new');
     });
 
     server.get('/books/:bookID',(req,res)=>{
